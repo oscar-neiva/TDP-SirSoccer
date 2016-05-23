@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}
+
+\bibitem{ssl-vision}
+Stefan Zickler, Tim Laue, Oliver Birbach, Mahisorn Wongphati, and Manuela
+  Veloso.
+\newblock Ssl-vision: The shared vision system for the robocup small size
+  league.
+\newblock In {\em RoboCup 2009: Robot Soccer World Cup XIII}, pages 425--436.
+  Springer, 2009.
+
+\bibitem{simulation_league}
+Wiki: Soccer simulation league.
+\newblock \url{http://wiki.robocup.org/wiki/Soccer_Simulation_League}.
+\newblock Acessado: 2016-05-23.
+
+\end{thebibliography}

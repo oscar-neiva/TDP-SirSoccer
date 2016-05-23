@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: root.aux
+The style file: unsrt.bst
+Database file #1: ref.bib
+I was expecting a `,' or a `}'---line 8 of file ref.bib
+ :   
+ :   note={url}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 2 entries,
+            1791 wiz_defined-function locations,
+            456 strings with 3869 characters,
+and the built_in function-call counts, 541 in all, are:
+= -- 51
+> -- 18
+< -- 1
++ -- 7
+- -- 5
+* -- 27
+:= -- 76
+add.period$ -- 7
+call.type$ -- 2
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 2
+duplicate$ -- 27
+empty$ -- 57
+format.name$ -- 5
+if$ -- 131
+int.to.chr$ -- 0
+int.to.str$ -- 2
+missing$ -- 1
+newline$ -- 13
+num.names$ -- 1
+pop$ -- 14
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 17
+stack$ -- 0
+substring$ -- 32
+swap$ -- 11
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 4
+width$ -- 3
+write$ -- 23
+(There was 1 error message)
