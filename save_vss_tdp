@@ -1,0 +1,41 @@
+VSS-Vision
+	Utiliza: ImGui -> Qt, OpenCV
+	- Programa de visão computacional padronizável inspirado SSL-Vision
+
+
+VSS-Viewer
+	Utiliza: freeglut3
+	- Visualizador de estados inspirado no monitor presente no RoboCup 2D e 3D Soccer Simulation
+
+
+
+VSS-SampleStrategy
+	Utiliza: ~
+	- utiliza o que quiser
+
+
+VSS-Simulator
+	Utiliza: bullet-physics
+	- possivel carregar shapes
+	
+
+ARQUITETURA
+	Utiliza: ZMQ, Protobuf 
+	- possibilita que diversos computadores rode o framework
+	- visão computacional pronta
+	- simulador pronto
+	
+
+
+SIRLab: Construção de um framework comum para a categoria de futebol de robôs IEEE Very Small Size
+
+% <-this % stops a space
+\thanks{*This work was not supported by any organization}% <-this % stops a space
+\thanks{$^{1}$Albert Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
+        University of Twente, 7500 AE Enschede, The Netherlands
+        {\tt\small albert.author@papercept.net}}%
+\thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
+        Dayton, OH 45435, USA
+        {\tt\small b.d.researcher@ieee.org}}%
+
+	
