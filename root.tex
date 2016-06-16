@@ -19,9 +19,10 @@
 %\usepackage{epsfig} % for postscript graphics files
 %\usepackage{mathptmx} % assumes new font selection scheme installed
 %\usepackage{times} % assumes new font selection scheme installed
-%\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amsmath} % assumes amsmath package installed
 %\usepackage{amssymb}  % assumes amsmath package installed
 \usepackage[latin1]{inputenc}
+%\usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{url}
 
@@ -33,13 +34,13 @@ SIRLab: Construção de um \textit{framework} para a categoria de futebol de robôs
 
 
 \author{
-Johnathan Fercher da Rosa$^{1}$, Lucas Borsatto Simão$^{2}$, Hebert Luiz Cabral da Silva$^{3}$,
-\\Felipe de Mello Amaral$^{3}$, Pedro Mello$^{3}$,
-\\Alberto Torres Angonese$^{3}$ e Eduardo Krempser da Silva$^{4}$.
+Johnathan Fercher da Rosa$^{1}$, Lucas Borsatto Simão$^{2}$, Hebert Luiz Cabral da Silva$^{2}$,
+\\Felipe de Mello Amaral$^{2}$, Pedro Mello$^{2}$,
+\\Alberto Torres Angonese$^{1,2}$ e Eduardo Krempser da Silva$^{2,3}$.
 \thanks{$^{1}$Instituto Militar de Engenharia - IME}%
 \thanks{$^{2}$Faculdade de Educação Tecnológia do Estado do Rio de Janeiro - FAETERJ}%
-\thanks{$^{3}$Universidade Católica de Petrópolis - UCP}%
-\thanks{$^{4}$Laboratório Nacional de Computação Científica - LNCC}%
+%\thanks{$^{3}$Universidade Católica de Petrópolis - UCP} %UCP meu toba! :) 
+\thanks{$^{3}$Laboratório Nacional de Computação Científica - LNCC}%
 }
 
 
@@ -60,20 +61,68 @@ Johnathan Fercher da Rosa$^{1}$, Lucas Borsatto Simão$^{2}$, Hebert Luiz Cabral 
 
 \section{FRAMEWORK}
 \subsection{VSS-Vision}
-(Zickler et al, 2009)\cite{ssl-vision}
+(Zickler et al, 2009) \cite{ssl-vision}
 \subsection{VSS-Simulator}
 \cite{simulation_league}
 \subsection{VSS-Viewer}
 \subsection{VSS-SampleStrategy}
 
-\section{CONTROLE}
+\section{SISTEMA E CONTROLE}
+%\label{controle}
+Os robôs da categoria IEEE \textit{Very Small Size Soccer} (VSSS) são do tipo diferenciais e não holonômicos (Figura~\ref{sistema}). Sendo a holonomia o conjunto de vínculos relacionados a mecânica onde há dependências apenas relacionadas às coordenadas espaciais que definem o sistema. E o termo diferencial faz referência ao modelo de robôs com duas rodas \cite{siciliano2002springer}. 
+
+\
+\begin{figure}[!htb]
+	\centering
+%	\includegraphics[scale=0.25]{figures/sistema}
+	\caption{Modelo \textit{Differential Driver}}
+	\label{sistema}
+\end{figure}
+
+As equações cinemáticas de um robô da categoria VSSS são equivalentes ao modelo de um uni ciclo. Robôs com tal arquitetura tem uma descrição não holonômica e cinemática de forma \cite{blazic2014periodic}:
+
+\begin{equation}
+		q = \begin{pmatrix}
+ 		x\\
+		y\\
+ 		\theta\\
+	\end{pmatrix} = 
+	\begin{pmatrix}
+ 		cos\theta & 0\\
+		sen\theta & 0\\
+ 		0 & 1\\
+	\end{pmatrix}
+	\begin{pmatrix}
+ 		v\\
+		\omega\\
+	\end{pmatrix}
+\end{equation}
+
+Sendo $q'$ a pose atual do sistema, $x'$ e $y'$ as componentes da velocidade tangencial em $x$ e $y$, $\theta$ a angulação do robô e $v$ e $\omega$ as velocidades tangencial e angular, respectivamente. Através da velocidade tangencial calculada no modelo (1), é feita a estimação das velocidades tangenciais para cada uma das rodas pelas equações (2,3).   
+
+\begin{equation}
+	v_e = v - \frac{\omega B}{2}
+\end{equation}
+
+\begin{equation}
+	v_d = v + \frac{\omega B}{2}	
+\end{equation}
+
+Para concluir-se que o sistema se comporta como deveria é necessário que este alcance a chamada referência. Sendo assim, enquanto uma ou mais vari\'aveis de sa\'ida não conseguem alcançar a refer\^encia, ao longo do tempo, um controlador manipula as entradas do sistema para obter o efeito desejado nas saídas. Esse controlador é aqui representado por $u(t)$, e o erro a ser corrigido para chegar-se convergência do sistema por $e(t)$. O controle PID \'e dado ent\~ao pela equação (4).
+
+\begin{equation}
+	u(t)=k_p.e(t)+k_d.\frac{de(t)}{dt}+k_i.\int^{t}_0 {e(t)dt}
+\end{equation}
+
+Sendo $k_p$, $k_d$ e $k_i$ par\^ametros de ajuste do controle.
+
 \section{TRANSMISSÃO}
 \section{HARDWARE}
 
 \section{CONCLUSÃO}
 
 \bibliographystyle{unsrt}
-\footnotesize\bibliography{ref}		
+\footnotesize\bibliography{sirlab}		
 
 
 

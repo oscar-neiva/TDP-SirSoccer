@@ -7,10 +7,22 @@ Stefan Zickler, Tim Laue, Oliver Birbach, Mahisorn Wongphati, and Manuela
   league.
 \newblock In {\em RoboCup 2009: Robot Soccer World Cup XIII}, pages 425--436.
   Springer, 2009.
+\newblock url.
 
 \bibitem{simulation_league}
 Wiki: Soccer simulation league.
 \newblock \url{http://wiki.robocup.org/wiki/Soccer_Simulation_League}.
 \newblock Acessado: 2016-05-23.
+
+\bibitem{siciliano2002springer}
+Bruno Siciliano, Oussama Khatib, and Frans Groen.
+\newblock {\em Springer Tracts in Advanced Robotics}.
+\newblock Springer, 2002.
+
+\bibitem{blazic2014periodic}
+Saso Blazic.
+\newblock On periodic control laws for mobile robots.
+\newblock {\em Industrial Electronics, IEEE Transactions on}, 61(7):3660--3670,
+  2014.
 
 \end{thebibliography}
