@@ -16,7 +16,7 @@
 
 % The following packages can be found on http:\\www.ctan.org
 \usepackage{graphics} % for pdf, bitmapped graphics files
-%\usepackage{epsfig} % for postscript graphics files
+\usepackage{epsfig} % for postscript graphics files
 %\usepackage{mathptmx} % assumes new font selection scheme installed
 %\usepackage{times} % assumes new font selection scheme installed
 \usepackage{amsmath} % assumes amsmath package installed
@@ -34,12 +34,11 @@ SIRLab: Construção de um \textit{framework} para a categoria de futebol de robôs
 
 
 \author{
-Johnathan Fercher da Rosa$^{1}$, Lucas Borsatto Simão$^{2}$, Hebert Luiz Cabral da Silva$^{2}$,
-\\Felipe de Mello Amaral$^{2}$, Pedro Mello$^{2}$,
-\\Alberto Torres Angonese$^{1,2}$ e Eduardo Krempser da Silva$^{2,3}$.
-\thanks{$^{1}$Instituto Militar de Engenharia - IME}%
-\thanks{$^{2}$Faculdade de Educação Tecnológia do Estado do Rio de Janeiro - FAETERJ}%
-%\thanks{$^{3}$Universidade Católica de Petrópolis - UCP} %UCP meu toba! :) 
+Johnathan Fercher da Rosa$^{2}$, Lucas Borsatto Simão$^{1}$, Hebert Luiz Cabral da Silva$^{1}$,
+\\Felipe de Mello Amaral$^{1}$, Pedro Mello$^{1}$,
+\\Alberto Torres Angonese$^{1,2}$ e Eduardo Krempser da Silva$^{1,3}$.
+\thanks{$^{1}$Faculdade de Educação Tecnológia do Estado do Rio de Janeiro - FAETERJ}%
+\thanks{$^{2}$Instituto Militar de Engenharia - IME}%
 \thanks{$^{3}$Laboratório Nacional de Computação Científica - LNCC}%
 }
 
@@ -67,14 +66,16 @@ Johnathan Fercher da Rosa$^{1}$, Lucas Borsatto Simão$^{2}$, Hebert Luiz Cabral 
 \subsection{VSS-Viewer}
 \subsection{VSS-SampleStrategy}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SISTEMA E CONTROLE}
 %\label{controle}
-Os robôs da categoria IEEE \textit{Very Small Size Soccer} (VSSS) são do tipo diferenciais e não holonômicos (Figura~\ref{sistema}). Sendo a holonomia o conjunto de vínculos relacionados a mecânica onde há dependências apenas relacionadas às coordenadas espaciais que definem o sistema. E o termo diferencial faz referência ao modelo de robôs com duas rodas \cite{siciliano2002springer}. 
+Os robôs da categoria IEEE \textit{Very Small Size Soccer} (VSSS) são do tipo diferenciais \cite{siciliano2002springer} e não holonômicos (Figura~\ref{sistema}). Sendo a holonomia o conjunto de vínculos relacionados a mecânica onde há dependências apenas relacionadas às coordenadas espaciais que definem o sistema. E o termo diferencial faz referência ao modelo de robôs com duas rodas que não são capazes de se movimentar em todas as coordenadas espaciais sem que mudem suas angulações.
 
 \
 \begin{figure}[!htb]
 	\centering
-%	\includegraphics[scale=0.25]{figures/sistema}
+	\includegraphics[width=0.4\textwidth]{figures/sistema}
 	\caption{Modelo \textit{Differential Driver}}
 	\label{sistema}
 \end{figure}
@@ -98,7 +99,7 @@ As equações cinemáticas de um robô da categoria VSSS são equivalentes ao modelo 
 	\end{pmatrix}
 \end{equation}
 
-Sendo $q'$ a pose atual do sistema, $x'$ e $y'$ as componentes da velocidade tangencial em $x$ e $y$, $\theta$ a angulação do robô e $v$ e $\omega$ as velocidades tangencial e angular, respectivamente. Através da velocidade tangencial calculada no modelo (1), é feita a estimação das velocidades tangenciais para cada uma das rodas pelas equações (2,3).   
+Sendo $q$ a pose atual do sistema, $x$ e $y$ as componentes da velocidade tangencial em $x$ e $y$, $\theta$ a angulação do robô e $v$ e $\omega$ as velocidades tangencial e angular, respectivamente. Através da velocidade tangencial calculada no modelo (1), é feita a estimação das velocidades tangenciais para cada uma das rodas pelas equações (2,3).   
 
 \begin{equation}
 	v_e = v - \frac{\omega B}{2}
@@ -116,14 +117,74 @@ Para concluir-se que o sistema se comporta como deveria é necessário que este al
 
 Sendo $k_p$, $k_d$ e $k_i$ par\^ametros de ajuste do controle.
 
-\section{TRANSMISSÃO}
-\section{HARDWARE}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{TRANSMISSÃO}
+\label{rede}
+
+A rede do time de futebol de robôs da SIRSoccer possui uma topologia do tipo estrela. O coordenador é configurado em modo broadcast, e os pacotes são transmitidos em massa para os três robôs, que fazem a interpretação do pacote e executam apenas o trecho da mensagem destinado a cada um deles.
+
+A rede é composta por três receptores configurados como \textit{end-point}, e um transmissor principal configurado como coordenador \cite{ZigbeeSite}. A frequência operante dos rádios XBee S3 (Figura~\ref{xbee-s3}) podem ser definidas de 902$Mhz$ (IEEE 802.15.4) até 928$Mhz$ (IEEE 802.15.4), diferente da versão anterior usada pela equipe em suas primeiras participações, que operava em 2.4$Ghz$ (IEEE 802.11$x$) como frequência padrão. 
+
+\
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.4\textwidth]{figures/xbee-s3}
+	\caption{XBee Pro S3B}
+	\label{xbee-s3}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{HARDWARE}
+\label{sistema}
+
+Os componentes base para o desenvolvimento da plataforma foram o rádio Digi Xbee S3B \cite{Digi2011}, o microcontrolador Arduino Micro \cite{Arduino}, o circuito integrado da Toshiba TB6612FNG \cite{toshiba}, os micro-motores da pololu \cite{Pololu} e seus \textit{encoders} \cite{Encoder} ópticos para micro motores. Foi então projetada uma placa dedicada a interconexão dos componentes básicos da plataforma (Figura~\ref{pinagem}), de modo a poupar espaço e a proporcionar melhor aproveitamento de baterias evitando que componentes que não estão sendo usados promovam gastos excessivos no sistema eletrônico.
+
+\
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.4\textwidth]{figures/pinagem}
+	\caption{Componentes do Hardware dos Robôs SIRSoccer}
+	\label{pinagem}
+\end{figure}
+
+Para receber as informações do servidor, o sistema robótico dispões de um rádio RF XBee S3B, circuito este responsável por transpor a comunicação de baixo nível lógico do XBee para o nível lógico do micro-controlador. A decodificação da informação recebida é feita pelo microcontrolador Arduino Micro, que vai enviar os comandos de movimentação para uma ponte-h \cite{Ponte-H} dupla da Toshiba, modelo TB6612FNG. Por fim, esta será responsável por transformar os comandos básicos de movimentação em pulsos para os motores \cite{pwm}.
+
+\
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.4\textwidth]{figures/encoder}
+	\caption{Motor de relaç\~ao 1:50 com encoder}
+	\label{encoder}
+\end{figure}
+
+Assim, com o espaço poupado pela utilização de uma placa única, foi possível usar duas baterias que somam um total de 2000mAh e operam em uma voltagem de 7,4V. E ainda foi possível utilizar \textit{encoders} (Figura~\ref{encoder}) nos micro motores para que atrav\'es das leituras de velocidade de rotaç\~ao fosse possível implementar um controle embarcado. 
+
+A motivação para criação desta placa advém de experiencias da equipe em competições anteriores. O uso de \textit{shields} \cite{DFRobots} pré-moldados com pinagens de fácil integração entre \textit{drivers} de motor, dispositivos de rádio frequência e microcontroladores  foram essenciais para que a equipe pudesse em um primeiro momento ter outras preocupações. No entanto, com o desenvolver do projeto, a busca por uma melhor desempenho dos robôs (Figura~\ref{robo-a} tem se mostrado essencial.
+
+\
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.4\textwidth]{figures/robo-a}
+	\caption{Rob\^o SirSoccer}
+	\label{robo-a}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CONCLUSÃO}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section*{APÊNDICE}
+%\label{apendice}
+%\subsection{UM APENDICE} %Isso é pra criar um A.nome do apêndice.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{AGRADECIMENTOS}
+A equipe SIRSoccer agradece a Faculdade de Educação Tecnológica do Estado do Rio de Janeiro (FAETERJ - Petrópolis) pelo apoio.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{unsrt}
 \footnotesize\bibliography{sirlab}		
-
-
 
 \end{document}
