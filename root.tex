@@ -8,7 +8,6 @@
 
 \IEEEoverridecommandlockouts                              % This command is only needed if 
                                                           % you want to use the \thanks command
-
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
 % See the \addtolength command later in the file to balance the column lengths
@@ -29,47 +28,82 @@
 \addto{\captionsenglish}{\renewcommand{\abstract}{\bf \small \textit{Resumo---}}}
 
 \title{\LARGE \bf
-SIRLab: Construção de um \textit{framework} para a categoria de futebol de robôs \textit{IEEE Very Small Size}
+	Descrição do Time de Futebol de Robôs da Equipe SIRSoccer para a Categoria \textit{IEEE Very Small Size Soccer}
 }
-
 
 \author{
-Johnathan Fercher da Rosa$^{2}$, Lucas Borsatto Simão$^{1}$, Hebert Luiz Cabral da Silva$^{1}$,
-\\Felipe de Mello Amaral$^{1}$, Pedro Mello$^{1}$,
-\\Alberto Torres Angonese$^{1,2}$ e Eduardo Krempser da Silva$^{1,3}$.
-\thanks{$^{1}$Faculdade de Educação Tecnológia do Estado do Rio de Janeiro - FAETERJ}%
-\thanks{$^{2}$Instituto Militar de Engenharia - IME}%
-\thanks{$^{3}$Laboratório Nacional de Computação Científica - LNCC}%
+	Johnathan Fercher da Rosa$^{2}$, Lucas Borsatto Simão$^{1}$, Hebert Luiz Cabral da Silva$^{1}$,
+	\\Felipe de Mello Amaral$^{1}$, Pedro Mello$^{1}$,
+	\\Alberto Torres Angonese$^{1,2}$ e Eduardo Krempser da Silva$^{1,3}$.
+	\thanks{*Este trabalho é apoiado pelo Laboratório de Sistemas Inteligentes e Robótica - SIRLab e pela Faculdade de Educação Tecnológica do Estado do Rio de Janeiro - FAETERJ}% <-this % stops a space
+	\thanks{$^{1}$Faculdade de Educação Tecnológia do Estado do Rio de Janeiro - FAETERJ}%
+	\thanks{$^{2}$Instituto Militar de Engenharia - IME}%
+	\thanks{$^{3}$Laboratório Nacional de Computação Científica - LNCC}%
 }
 
-
 \begin{document}
-
-
 \maketitle
 \thispagestyle{empty}
 \pagestyle{empty}
 
-
 \begin{abstract}
-	teste teste
+	Neste artigo s\~ao apresentados os resultados do trabalho realizado em 2016 pela equipe SIRSoccer de futebol de rob\^os, categoria \textit{Very Small Size Soccer - VSSS}, para participaç\~ao na XIII Competiç\~ao Brasileira de Rob\'otica - CBR e na XIV Competiç\~ao Latino Americana de Robótica - LARC. Aqui estão descritos os trabalhos de todas as etapas de construção do time de futebol. Uma descrição mais detalhada é apresentada nas seções: \textit{Framework}, Sistema e Controle, Transmissão e \textit{Hardware}, uma vez que essas foram as partes com maior evolução desde a primeira participação da equipe em 2013. 
 \end{abstract}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{INTRODUÇÃO}
+A Faculdade de Educação Tecnológica do Estado do Rio de Janeiro - FAETERJ/Petrópolis, possui o curso superior de Tecnologia da Informação e de Comunicação, em que além das disciplinas tecnológicas previstas no currículo, os alunos também participam de outras atividades, de forma a contribuir para a formação acadêmica. O Laboratório de Sistemas Inteligentes e Robótica - SIRLab, surge com a ideia de proporcionar um ambiente para prática e estudo em computação, robótica e inteligência computacional.
 
+A IEEE \textit{Very Small Size Soccer - VSSS} é uma categoria de futebol de robôs \cite{ferreira2013desenvolvimento} que proporciona o estudo em diversas áreas. O time de robôs que jogam futebol trata-se de um sistema autônomo com um servidor e três agentes que executam ações determinadas por este servidor. As informações de jogo chegam ao servidor por meio de imagens, estas fornecidas por uma câmera que fica instalada a 2$m$ ou mais da base do campo. As informações são processadas pelo servidor e em seguida um comando é enviado aos robôs por rádio frequência.
+
+O sistema de um time de futebol de rob\^os IEEE VSSS \'e cooperativo e atua em um ambiente altamente din\^amico, o que faz do seu desenvolvimento algo muito complexo. As seções deste artigo estão divididas conforme as linhas de estudo necessárias para o desenvolvimento do trabalho. No desenvolvimento do projeto foram necessários estudos em visão computacional, sistemas e controle, redes e eletrônica. Assim, o trabalho feito será apresentado partindo do novo \textit{Framework} criado pela equipe até o \textit{hardware} do robô.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{FRAMEWORK}
-\subsection{VSS-Vision}
-(Zickler et al, 2009) \cite{ssl-vision}
-\subsection{VSS-Simulator}
-\cite{simulation_league}
-\subsection{VSS-Viewer}
-\subsection{VSS-SampleStrategy}
+%\label{framework}
+Atualmente o laboratório vem trabalhando na integração das ferramentas desenvolvidas durante esses anos de trabalho, foi desenvolvido, inspirado na arquitetura fornecida para os competidores das categorias Small Size League (SSL) \cite{ssl-vision} e RoboCup 2D Soccer Simulation, programas separados e fechados de forma a os novos integrantes do laboratório terem que se preocupar apenas com a construção e aprimoramento do software de inteligência. 
 
+Utilizando as bibliotecas Protobuf e ZMQ, foi criado um protocolo de comunicação, afim de padronizar os fluxos de entrada e saída de dados entre os seguintes programas: Software de Visão Computacional (VSS-Vision), Simulador da categoria IEEE VSS (VSS-Simulator), (Visualizador de Estados) VSS-Viewer e (Núcleo de Estratégia) VSS-SampleStrategy. Atualmente uma estratégia/inteligência escrita aos moldes do VSS-SampleStrategy funciona sem necessidades de adaptação com os demais projetos, assim facilitando a integração e o desenvolvimento.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{VSS-Vision}
+%\label{vss-vision}
+O novo sistema de vis\~ao computacional VSS-Vision utiliza a biblioteca OpenCV \cite{bradski2000opencv} e faz uso do padrão de cores HSV para captação e filtragem de imagens. A OpenCV é uma biblioteca livre, sob a licença de código aberto BSD (\textit{Berkeley Software Distribution}). A biblioteca pode ser implementada em Python, C++ e outras linguagens, porém, dado que todo o restante do sistema está implementado em C++, optou-se por essa linguagem \cite{stroustrup1995c++}.
+
+O programa localiza na imagem as cores desejadas (Figura~\ref{tela}), e faz a distinção dos objetos do jogo. E para o tratamento das imagens captadas são usados alguns filtros da biblioteca \cite{jfercher}. O sistema obteve avanços, uma vez que com o uso do HSV ao invés do RGB, os problemas relacionados ao gradiente de luminosidade foram resolvidos. Pode ser visto em \cite{ohta1987computer}, um estudo comparativo de diversos sistemas de cores aplicados à segmentação por cor, onde o modelo HSV apresentou informações de cor e luminância mais descorrelacionadas que no modelo RGB. Com isso, o modelo HSV mostra-se mais adequado para segmentação baseada em cores. E ap\'os a mudança no programa, o sistema está mais robusto a variaç\~oes luminosas.
+
+\
+\begin{figure}[!htb]
+	\centering
+	%\includegraphics[scale=0.17]{figures/vss-vision}
+	\caption{VSS-Vision em Execução}
+	\label{vss-vision}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{VSS-Simulator}
+%\label{vss-simulator}
+O simulador criado pela equipe do laboratório SIRLab para a categoria VSSS (Figura~\ref{vss-simulator}) tem o objetivo de facilitar a criação de estratégias que podem ser implementadas pelos robôs. O padrão de projeto utilizado garante que, mesmo que o código seja feito pelo simulador, ele irá funcionar também para a plataforma física da categoria, de forma que é possível que os integrantes realizem seus progressos na estratégia e apenas tenham que migrar o código para que possa ser executado nos robôs.
+
+\
+\begin{figure}[!htb]
+	\centering
+	%\includegraphics[scale=0.17]{figures/vss-simulator}
+	\caption{Janela Gráfica de Execução do VSS-Simulator}
+	\label{vss-simulator}
+\end{figure}
+
+Isso é possível devido a modulação do projeto, que é dividido em partes físicas, gráficas e de estratégia. A parte física fornece os mesmos dados que a plataforma com a câmera, de modo que, garantido que os dados vão abastecer as outras partes da mesma maneira, é possível o desenvolvimento independente.
+
+O simulador é desenvolvido com o apoio das bibliotecas de OpenGL \cite{glut}, responsáveis pela parte gráfica, e com a versão 2.83 da Bullet Physics \cite{bullet}, que tem a função de simular toda a física da plataforma. A Bullet funciona com base nos intervalos de tempo que um ciclo do OpenGL leva para poder ser processado, fazendo com que o processamento físico seja sincronizado com o processamento gráfico, sendo realizado logo depois. Os robôs são criados via Bullet, que então fica responsável pela sua movimentação. Essa parte é executada com base nos dados que a estratégia do simulador define, determinando a velocidade que as rodas do robô devem atingir para que possa alcançar o ponto de destino desejado, de forma que fica a critério do desenvolvedor determinar qual a rota que o robô irá adotar.
+
+O desenvolvimento da plataforma de simulação requere alguns cuidados, pois a própria Bullet possui um sistema de veículos próprios, mas que teve que ser modificado pela equipe para que pudesse ser compatível ao modelo da categoria VSSS. Um exemplo técnico disso é o sistema de movimentação dos veículos dentro da biblioteca, que ocorre com base em um sistema de coordenadas relativa ao sistema cartesiano externo, e não relativo ao próprio veículo. Como a velocidade do veículo é sempre incrementada de um valor baseado em um determinado impulso (proveniente dos intervalos do ciclo), isso causa alguns problemas, como quando se acrescenta velocidade ao veículo, mas o vetor unitário que determina sua parte frontal tem as suas duas componentes X e Y negativas, fazendo com que, ao invés de a velocidade seja incrementada, ela acabe diminuindo.
+
+Assim, testes vêm sendo feitos na parte da estratégia. Comparações são feitas entre os resultados obtidos no simulador e no sistema físico e, logo em seguida, são feitas modificações no sistema físico, ou um novo método é testado no simulador.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SISTEMA E CONTROLE}
-%\label{controle}
+%\label{sistema}
 Os robôs da categoria IEEE \textit{Very Small Size Soccer} (VSSS) são do tipo diferenciais \cite{siciliano2002springer} e não holonômicos (Figura~\ref{sistema}). Sendo a holonomia o conjunto de vínculos relacionados a mecânica onde há dependências apenas relacionadas às coordenadas espaciais que definem o sistema. E o termo diferencial faz referência ao modelo de robôs com duas rodas que não são capazes de se movimentar em todas as coordenadas espaciais sem que mudem suas angulações.
 
 \
@@ -83,10 +117,10 @@ Os robôs da categoria IEEE \textit{Very Small Size Soccer} (VSSS) são do tipo di
 As equações cinemáticas de um robô da categoria VSSS são equivalentes ao modelo de um uni ciclo. Robôs com tal arquitetura tem uma descrição não holonômica e cinemática de forma \cite{blazic2014periodic}:
 
 \begin{equation}
-		q = \begin{pmatrix}
- 		x\\
-		y\\
- 		\theta\\
+		\dot{q} = \begin{pmatrix}
+ 		\dot{x}\\
+		\dot{y}\\
+ 		\dot{\theta}\\
 	\end{pmatrix} = 
 	\begin{pmatrix}
  		cos\theta & 0\\
@@ -99,7 +133,7 @@ As equações cinemáticas de um robô da categoria VSSS são equivalentes ao modelo 
 	\end{pmatrix}
 \end{equation}
 
-Sendo $q$ a pose atual do sistema, $x$ e $y$ as componentes da velocidade tangencial em $x$ e $y$, $\theta$ a angulação do robô e $v$ e $\omega$ as velocidades tangencial e angular, respectivamente. Através da velocidade tangencial calculada no modelo (1), é feita a estimação das velocidades tangenciais para cada uma das rodas pelas equações (2,3).   
+Sendo $\dot{q}$ a pose atual do sistema, $\dot{x}$ e $\dot{y}$ as componentes da velocidade tangencial em $\dot{x}$ e $\dot{y}$, $\dot{\theta}$ a angulação do robô e $v$ e $\omega$ as velocidades tangencial e angular, respectivamente. Através da velocidade tangencial calculada no modelo (1), é feita a estimação das velocidades tangenciais para cada uma das rodas pelas equações (2,3).   
 
 \begin{equation}
 	v_e = v - \frac{\omega B}{2}
@@ -117,11 +151,9 @@ Para concluir-se que o sistema se comporta como deveria é necessário que este al
 
 Sendo $k_p$, $k_d$ e $k_i$ par\^ametros de ajuste do controle.
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{TRANSMISSÃO}
-\label{rede}
-
+%\label{transmissao}
 A rede do time de futebol de robôs da SIRSoccer possui uma topologia do tipo estrela. O coordenador é configurado em modo broadcast, e os pacotes são transmitidos em massa para os três robôs, que fazem a interpretação do pacote e executam apenas o trecho da mensagem destinado a cada um deles.
 
 A rede é composta por três receptores configurados como \textit{end-point}, e um transmissor principal configurado como coordenador \cite{ZigbeeSite}. A frequência operante dos rádios XBee S3 (Figura~\ref{xbee-s3}) podem ser definidas de 902$Mhz$ (IEEE 802.15.4) até 928$Mhz$ (IEEE 802.15.4), diferente da versão anterior usada pela equipe em suas primeiras participações, que operava em 2.4$Ghz$ (IEEE 802.11$x$) como frequência padrão. 
@@ -136,9 +168,8 @@ A rede é composta por três receptores configurados como \textit{end-point}, e um
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{HARDWARE}
-\label{sistema}
-
-Os componentes base para o desenvolvimento da plataforma foram o rádio Digi Xbee S3B \cite{Digi2011}, o microcontrolador Arduino Micro \cite{Arduino}, o circuito integrado da Toshiba TB6612FNG \cite{toshiba}, os micro-motores da pololu \cite{Pololu} e seus \textit{encoders} \cite{Encoder} ópticos para micro motores. Foi então projetada uma placa dedicada a interconexão dos componentes básicos da plataforma (Figura~\ref{pinagem}), de modo a poupar espaço e a proporcionar melhor aproveitamento de baterias evitando que componentes que não estão sendo usados promovam gastos excessivos no sistema eletrônico.
+%\label{hardware}
+Os componentes base para o desenvolvimento da plataforma foram o rádio Digi Xbee S3B \cite{XBee}, o microcontrolador Arduino Micro \cite{Arduino}, o circuito integrado da Toshiba TB6612FNG \cite{Toshiba}, os micro-motores da pololu \cite{Pololu} e seus \textit{encoders} \cite{Encoder} ópticos para micro motores. Foi então projetada uma placa dedicada a interconexão dos componentes básicos da plataforma (Figura~\ref{pinagem}), de modo a poupar espaço e a proporcionar melhor aproveitamento de baterias evitando que componentes que não estão sendo usados promovam gastos excessivos no sistema eletrônico.
 
 \
 \begin{figure}[!htb]
@@ -166,13 +197,14 @@ A motivação para criação desta placa advém de experiencias da equipe em competiç
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.4\textwidth]{figures/robo-a}
-	\caption{Rob\^o SirSoccer}
+	\caption{Rob\^o SIRSoccer}
 	\label{robo-a}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CONCLUSÃO}
-
+%\label{conclusao}
+Durante os trabalhos em 2016, a equipe SIRSoccer estudou técnicas e modelos para aperfeiçoar seu time de futebol de robôs \textit{Very Small Size Soccer}. Dentre os avanços obtidos este ano, destaca-se o início de estudos mais aprofundados em sistemas e controle, a criação de uma placa e termino do desenvolvimento do simulador. Planos já estão sendo traçados para as futuras participações da equipe na LARC, e este ano espera-se obter resultados ainda mais satisfatórios que nas edições anteriores.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section*{APÊNDICE}
