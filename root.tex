@@ -35,10 +35,10 @@
 	Johnathan Fercher da Rosa$^{2}$, Lucas Borsatto Simão$^{1}$, Hebert Luiz Cabral da Silva$^{1}$, 
 	\\Felipe de Mello Amaral$^{1}$, Pedro Mello$^{1}$, Hiago Guedes$^{1}$
 	\\Alberto Torres Angonese$^{1,2}$ e Eduardo Krempser da Silva$^{1,3}$
-	\thanks{*Este trabalho é apoiado pelo Laboratório de Sistemas Inteligentes e Robótica - SIRLab e pela Faculdade de Educação Tecnológica do Estado do Rio de Janeiro - FAETERJ}% <-this % stops a space
+	\thanks{*Este trabalho é apoiado pelo Laboratório de Sistemas Inteligentes e Robótica -- SIRLab, pela Faculdade de Educação Tecnológica do Estado do Rio de Janeiro -- FAETERJ e pelo Laboratório Nacional de Computação Científica -- LNCC}% <-this % stops a space
 	\thanks{$^{1}$Faculdade de Educação Tecnológia do Estado do Rio de Janeiro - FAETERJ}%
 	\thanks{$^{2}$Instituto Militar de Engenharia - IME}%
-	\thanks{$^{3}$Laboratório Nacional de Computação Científica - LNCC}%
+	\thanks{$^{3}$Fundação Oswaldo Cruz - Fiocruz}%
 }
 
 \begin{document}
@@ -47,7 +47,7 @@
 \pagestyle{empty}
 
 \begin{abstract}
-	Neste \textit{Team Description Paper - TDP} são apresentados os resultados do trabalho realizado em 2016 pela equipe SIRSoccer. O \textit{paper} tem como objetivo descrever o desenvolvimento de uma plataforma de futebol de robôs da categoria IEEE \textit{Very Small Size Soccer - VSSS}, para participação na XIV Competiç\~ao Brasileira de Rob\'otica - CBR e na XV Competiç\~ao Latino Americana de Robótica - LARC. São descritos os trabalhos de todas as etapas de construção do time. Algumas seções estão um pouco mais detalhadas: \textit{Framework} e Transmissão, uma vez que estas foram as partes com maior evolução durantes os trabalhos este ano. 
+	Neste \textit{Team Description Paper - TDP} são apresentados os resultados do trabalho realizado em 2016 pela equipe SIRSoccer. O objetivo é descrever o desenvolvimento de uma plataforma de futebol de robôs da categoria IEEE \textit{Very Small Size Soccer - VSSS}, para participação na XIV Competiç\~ao Brasileira de Rob\'otica - CBR e na XV Competiç\~ao Latino Americana de Robótica - LARC. São descritos os trabalhos de todas as etapas de construção do time. Com destaque para a construção de um \textit{Framework} desenvolvido para a categoria e da Transmissão dos robôs, uma vez que estas foram as partes com maior evolução durantes os trabalhos este ano. 
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,9 +61,10 @@ O sistema de um time de futebol de robôs IEEE VSSS é cooperativo e atua em um am
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{FRAMEWORK}
 %\label{framework}
-Atualmente o laboratório vem trabalhando na integração das ferramentas desenvolvidas durante esses anos de trabalho, foi desenvolvido, inspirado na arquitetura fornecida para os competidores das categorias Small Size League (SSL) \cite{ssl-vision} e RoboCup 2D Soccer Simulation, programas separados e fechados de forma a os novos integrantes do laboratório terem que se preocupar apenas com a construção e aprimoramento do software de inteligência. 
+Atualmente o laboratório vem trabalhando na integração das ferramentas desenvolvidas durante esses anos de trabalho, foi desenvolvido, inspirado na arquitetura fornecida para os competidores das categorias Small Size League (SSL) \cite{ssl-vision} e RoboCup 2D Soccer Simulation, programas separados e fechados de forma que os novos integrantes do laboratório possam se preocupar apenas com a construção e aprimoramento do \textit{software} de inteligência. 
 
-Utilizando as bibliotecas Protobuf e ZMQ, foi criado um protocolo de comunicação, afim de padronizar os fluxos de entrada e saída de dados entre os seguintes programas: Software de Visão Computacional (VSS-Vision), Simulador da categoria IEEE VSS (VSS-Simulator), (Visualizador de Estados) VSS-Viewer e (Núcleo de Estratégia) VSS-SampleStrategy. Atualmente uma estratégia/inteligência escrita aos moldes do VSS-SampleStrategy funciona sem necessidades de adaptação com os demais projetos, assim facilitando a integração e o desenvolvimento.
+Utilizando as bibliotecas Protobuf e ZMQ, foi criado um protocolo de comunicação, com a finalidade de padronizar os fluxos de entrada e saída de dados entre os seguintes programas: \textit{Software} de Visão Computacional (VSS-Vision), Simulador da categoria IEEE VSS (VSS-Simulator), (Visualizador de Estados) VSS-Viewer e (Núcleo de Estratégia) VSS-SampleStrategy. 
+Atualmente uma estratégia/inteligência escrita aos moldes do VSS-SampleStrategy funciona sem necessidades de adaptação com os demais projetos, assim facilitando a integração e o desenvolvimento.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{VSS-Vision}
@@ -97,12 +98,12 @@ Isso é possível devido a modulação do projeto, que é dividido em partes físicas,
 
 O simulador é desenvolvido com o apoio das bibliotecas de OpenGL \cite{glut}, responsáveis pela parte gráfica, e com a versão 2.83 da Bullet Physics \cite{bullet}, que tem a função de simular toda a física da plataforma. A Bullet funciona com base nos intervalos de tempo que um ciclo do OpenGL leva para poder ser processado, fazendo com que o processamento físico seja sincronizado com o processamento gráfico, sendo realizado logo depois. Os robôs são criados via Bullet, que então fica responsável pela sua movimentação. Essa parte é executada com base nos dados que a estratégia do simulador define, determinando a velocidade que as rodas do robô devem atingir para que possa alcançar o ponto de destino desejado, de forma que fica a critério do desenvolvedor determinar qual a rota que o robô irá adotar.
 
-O desenvolvimento da plataforma de simulação requere alguns cuidados, pois a própria Bullet possui um sistema de veículos próprios, mas que teve que ser modificado pela equipe para que pudesse ser compatível ao modelo da categoria VSSS. Um exemplo técnico disso é o sistema de movimentação dos veículos dentro da biblioteca, que ocorre com base em um sistema de coordenadas relativa ao sistema cartesiano externo, e não relativo ao próprio veículo. Como a velocidade do veículo é sempre incrementada de um valor baseado em um determinado impulso (proveniente dos intervalos do ciclo), isso causa alguns problemas, como quando se acrescenta velocidade ao veículo, mas o vetor unitário que determina sua parte frontal tem as suas duas componentes X e Y negativas, fazendo com que, ao invés de a velocidade seja incrementada, ela acabe diminuindo.
+O desenvolvimento da plataforma de simulação requer alguns cuidados, pois a própria Bullet possui um sistema de veículos próprios, mas que teve que ser modificado pela equipe para que pudesse ser compatível ao modelo da categoria VSSS. Um exemplo técnico disso é o sistema de movimentação dos veículos dentro da biblioteca, que ocorre com base em um sistema de coordenadas relativa ao sistema cartesiano externo, e não relativo ao próprio veículo.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SISTEMA E CONTROLE}
 %\label{sistema}
-Os robôs da categoria IEEE \textit{Very Small Size Soccer} (VSSS) são do tipo diferenciais \cite{siciliano2002springer} e não holonômicos (Figura~\ref{sistema}). Sendo a holonomia o conjunto de vínculos relacionados a mecânica onde há dependências apenas relacionadas às coordenadas espaciais que definem o sistema. E o termo diferencial faz referência ao modelo de robôs com duas rodas que não são capazes de se movimentar livremente em todas as coordenadas espaciais sem que mudem suas angulações.
+Os robôs da categoria IEEE \textit{Very Small Size Soccer} são do tipo diferenciais \cite{siciliano2002springer} e não holonômicos (Figura~\ref{sistema}). Sendo a holonomia o conjunto de vínculos relacionados a mecânica onde há dependências apenas relacionadas às coordenadas espaciais que definem o sistema. E o termo diferencial faz referência ao modelo de robôs com duas rodas que não são capazes de se movimentar livremente em todas as coordenadas espaciais sem que mudem suas angulações.
 
 \
 \begin{figure}[!htb]
@@ -148,7 +149,7 @@ A equipe vem estudando diversas formas de controlar as variações abruptas do sis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{TRANSMISSÃO}
 %\label{transmissao}
-A rede do time de futebol de robôs da SIRSoccer possui uma topologia do tipo estrela. O coordenador é configurado em modo broadcast, e os pacotes são transmitidos em massa para os três robôs, que fazem a interpretação do pacote e executam apenas o trecho da mensagem destinado a cada um deles.
+A rede do time de futebol de robôs da SIRSoccer possui uma topologia do tipo estrela. O coordenador é configurado em modo \textit{broadcast}, e os pacotes são transmitidos em massa para os três robôs, que fazem a interpretação do pacote e executam apenas o trecho da mensagem destinado a cada um deles.
 
 A rede é composta por três receptores configurados como \textit{end-point}, e um transmissor principal configurado como coordenador \cite{ZigbeeSite}. A frequência operante dos rádios XBee S3 (Figura~\ref{xbee-s3}) podem ser definidas de 902$Mhz$ (IEEE 802.15.4) até 928$Mhz$ (IEEE 802.15.4), diferente da versão anterior usada pela equipe em suas primeiras participações, que operava em 2.4$Ghz$ (IEEE 802.11$x$) como frequência padrão. 
 
